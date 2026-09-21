@@ -43,9 +43,10 @@ else
     echo "[diy] feeds/luci/Makefile not found"
 fi
 
-# 4) after defconfig, force-off packages restored by SELECT
+# 4) generate full .config. IMPORTANT: do NOT sed .config here to
+#    "force-off" packages -- a disabled line without the leading '#'
+#    (" CONFIG_PACKAGE_x is not set") makes the next 'make defconfig'
+#    fail with "missing separator". oui/pm are already dropped at the
+#    source level above (luci/Makefile), so no .config editing needed.
 make defconfig
-for p in luci-app-oui luci-app-package-manager luci-proto-ipv6; do
-    sed -i "s#^CONFIG_PACKAGE_${p}=y# CONFIG_PACKAGE_${p} is not set#" .config
-done
 echo "[diy] done"
